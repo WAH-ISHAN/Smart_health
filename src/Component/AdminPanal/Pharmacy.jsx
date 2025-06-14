@@ -1,14 +1,13 @@
-export function AddDoc() {
+export function Pharmacy() {
   return (
-    
-        <div className="w-full h-full flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">Add Doctor</h2>
-            <form className="space-y-4">
-                <div>
-                <label className="block text-gray-700 mb-2" htmlFor="name">Doctor Name</label>
-                <input
-                    type="text"
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">Add Doctor</h2>
+        <form className="space-y-4">
+          <div>
+            <label className="block text-gray-700 mb-2" htmlFor="name">Doctor Name</label>
+            <input
+              type="text"
                     id="name"
                     className="w-full p-2 border border-gray-300 rounded"
                     placeholder="Enter doctor's name"
@@ -44,4 +43,4 @@ export function AddDoc() {
     
   );
 }
-export default AddDoc;
+export default Pharmacy;

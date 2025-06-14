@@ -1,11 +1,7 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { AdminDash } from "./AdminDash";
-import { AddDoc } from "./AddDoc";
-import { EditDoc } from "./EditDoc";
-import { AddHospital } from "./AddHospital";
-import { EditHospital } from "./EditHospital";
-import { Profile } from "./Profile";
-import { Users } from "./Users";
+import { Pharmacy } from "./Pharmacy";
+import { Patients } from "./Patients";
 
 export default function AdminHome() {
   const location = useLocation();
@@ -59,9 +55,9 @@ export default function AdminHome() {
       <main className="h-full bg-gray-400 flex-1 rounded-3xl p-6 overflow-y-auto text-white">
         <Routes>
           <Route path="AdminDash" element={<AdminDash />} />
-          <Route path="AddDoc" element={<AddDoc />} />
-          <Route path="EditDoc" element={<EditDoc />} />
-          <Route path="AddHospital" element={<AddHospital />} />
+          <Route path="Pharmacy" element={<Pharmacy />} />
+          <Route path="Patients" element={<Patients />} />
+          <Route path="Doctors" element={<Doctors />} />
           <Route path="EditHospital" element={<EditHospital />} />
           <Route path="Users" element={<Users />} />
           <Route path="Profile" element={<Profile />} />

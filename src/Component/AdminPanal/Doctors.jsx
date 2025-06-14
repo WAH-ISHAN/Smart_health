@@ -1,4 +1,4 @@
-export function AddHospital() {
+export function Doctors() {
     return (
         <div className="w-full h-full flex items-center justify-center">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -42,4 +42,4 @@ export function AddHospital() {
         </div>
     );
 }
-export default AddHospital;
+export default Doctors;

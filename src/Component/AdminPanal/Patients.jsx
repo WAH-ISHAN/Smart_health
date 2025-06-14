@@ -1,4 +1,4 @@
-export function EditDoc() {
+export function Patients() {
   return (
     <div className="w-full h-full flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -33,4 +33,4 @@ export function EditDoc() {
     </div>
   );
 }
-export default EditDoc;
+export default Patients;
