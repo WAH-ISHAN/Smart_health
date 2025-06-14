@@ -1,7 +1,10 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { AdminDash } from "./AdminDash";
 import { Pharmacy } from "./Pharmacy";
+import { Doctors } from "./Doctors";
 import { Patients } from "./Patients";
+import Profile from "./Profile";
+import Users from "./Users";
 
 export default function AdminHome() {
   const location = useLocation();
@@ -31,17 +34,14 @@ export default function AdminHome() {
         <Link to="/AdminHome/Users" className={`${getLinkClass("Users")} ${animatedLinkClass}`}>
           Users
         </Link>
-        <Link to="/AdminHome/AddDoc" className={`${getLinkClass("AddDoc")} ${animatedLinkClass}`}>
-          Add Doctors
+        <Link to="/AdminHome/Pharmacy" className={`${getLinkClass("Pharmacy")} ${animatedLinkClass}`}>
+          Pharmacy
         </Link>
-        <Link to="/AdminHome/EditDoc" className={`${getLinkClass("EditDoc")} ${animatedLinkClass}`}>
-          Edit Doctors Details
+        <Link to="/AdminHome/Patients" className={`${getLinkClass("Patients")} ${animatedLinkClass}`}>
+          Patients
         </Link>
-        <Link to="/AdminHome/AddHospital" className={`${getLinkClass("AddHospital")} ${animatedLinkClass}`}>
-          Hospital Details
-        </Link>
-        <Link to="/AdminHome/EditHospital" className={`${getLinkClass("EditHospital")} ${animatedLinkClass}`}>
-          Edit Hospital Details
+        <Link to="/AdminHome/Doctors" className={`${getLinkClass("Doctors")} ${animatedLinkClass}`}>
+          Doctors
         </Link>
         <Link to="/AdminHome/pageoverview" className={`${getLinkClass("pageoverview")} ${animatedLinkClass}`}>
           Page Overview
@@ -58,7 +58,6 @@ export default function AdminHome() {
           <Route path="Pharmacy" element={<Pharmacy />} />
           <Route path="Patients" element={<Patients />} />
           <Route path="Doctors" element={<Doctors />} />
-          <Route path="EditHospital" element={<EditHospital />} />
           <Route path="Users" element={<Users />} />
           <Route path="Profile" element={<Profile />} />
           <Route path="pageoverview" element={<h1 className="text-3xl font-semibold">Page Overview</h1>} />
