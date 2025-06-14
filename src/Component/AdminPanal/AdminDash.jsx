@@ -9,3 +9,4 @@ export function AdminDash() {
     </div>
   );
 }
+export default AdminDash;

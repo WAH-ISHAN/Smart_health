@@ -1,0 +1,45 @@
+export function AddHospital() {
+    return (
+        <div className="w-full h-full flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">Add Hospital</h2>
+            <form className="space-y-4">
+            <div>
+                <label className="block text-gray-700 mb-2" htmlFor="name">Hospital Name</label>
+                <input
+                type="text"
+                id="name"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Enter hospital's name"
+                />
+            </div>
+            <div>
+                <label className="block text-gray-700 mb-2" htmlFor="address">Address</label>
+                <input
+                type="text"
+                id="address"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Enter hospital's address"
+                />
+            </div>
+            <div>
+                <label className="block text-gray-700 mb-2" htmlFor="location">Location</label>
+                <input
+                type="text"
+                id="location"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Enter location"
+                />
+            </div>
+            <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
+            >
+                Add Hospital
+            </button>
+            </form>
+        </div>
+        </div>
+    );
+}
+export default AddHospital;
