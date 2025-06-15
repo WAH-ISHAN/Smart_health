@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState } from "react";
+import axios from "axios";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,11 +11,22 @@ export default function LoginPage() {
     e.preventDefault();
     console.log("Login clicked with:", { email, password, userType });
 
-    // You can call your Spring Boot login endpoint here
-    // Example:
-    // axios.post(`/api/login/${userType}`, { email, password })
-    //   .then(res => ...)
-    //   .catch(err => ...)
+    // 🔗 ME SPRING BOOT BACKEND EKATA CONNECT KARANNA:
+    axios.post(`http://localhost:8080/api/login/${userType}`, {
+      email,
+      password
+    })
+    .then(res => {
+      console.log("Login Success:", res.data);
+      // Token save + redirect
+      localStorage.setItem("token", res.data.token);
+      // example redirect logic:
+      // if (userType === "admin") navigate("/AdminHome");
+    })
+    .catch(err => {
+      console.error("Login failed:", err);
+      alert("Invalid credentials");
+    });
   }
 
   return (
