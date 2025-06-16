@@ -1,5 +1,5 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
-import { AdminDash } from "./AdminDash";
+import  AdminDash  from "./AdminDash";
 import { Pharmacy } from "./Pharmacy";
 import { Doctors } from "./Doctors";
 import { Patients } from "./Patients";
