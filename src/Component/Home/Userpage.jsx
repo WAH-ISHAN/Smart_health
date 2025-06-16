@@ -1,6 +1,8 @@
 import { Header } from "../AdminPanal/unit/Header";
 import SearchBar from "../AdminPanal/unit/Searchbar"
 import Contact from "../Home/Contact"
+import DoctorList from "./Doctor";
+import HospitalList from "./HospitalList";
 
 export function Userpage() {
   return (
@@ -55,10 +57,11 @@ export function Userpage() {
 </div>
 
       <div>
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">User Page</h2>
+        <h2 className="text-4xl font-bold mb-6 text-gray-800">Our Services</h2>
         <p className="text-gray-600">Welcome to the user page!</p>
       </div>
-         
+         <HospitalList />
+         <DoctorList />
     </div>
   );
 }

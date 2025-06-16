@@ -4,17 +4,19 @@ import LoginPage from "./Component/Login/Login";
 import Register from "./Component/Login/Register";
 import Home from "./Component/Home/HomePage";
 import { Userpage } from "./Component/Home/Userpage";
+import HospitalList from "./Component/Home/HospitalList";
+
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes path="/">
+      <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/" element={<AdminHome />} />
+        <Route path="/AdminHome/*" element={<AdminHome />} />
         <Route path="/Login" element={<LoginPage />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/Userpage" element={<Userpage />} />
-        <Route path="/AdminHome/*" element={<AdminHome />} />
+        <Route path="/HospitalList/*" element={<HospitalList />} />
       </Routes>
     </BrowserRouter>
   );
