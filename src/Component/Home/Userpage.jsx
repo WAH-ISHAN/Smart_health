@@ -3,6 +3,7 @@ import SearchBar from "../AdminPanal/unit/Searchbar"
 import Contact from "../Home/Contact"
 import DoctorList from "./Doctor";
 import HospitalList from "./HospitalList";
+import {TopSelections} from "./TopSelections";
 
 export function Userpage() {
   return (
@@ -57,8 +58,8 @@ export function Userpage() {
 </div>
 
       <div>
-        <h2 className="text-4xl font-bold mb-6 text-gray-800">Our Services</h2>
-        <p className="text-gray-600">Welcome to the user page!</p>
+        <TopSelections />
+       
       </div>
          <HospitalList />
          <DoctorList />

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 // import axios from 'axios'; // Uncomment when backend ready
 import { FaHospitalSymbol, FaMapMarkerAlt } from 'react-icons/fa';
 
 export default function HospitalList() {
   const [search, setSearch] = useState('');
-  const [hospitals, setHospitals] = useState([
+  const [hospitals] = useState([
     {
       name: 'City General Hospital',
       location: 'Colombo',

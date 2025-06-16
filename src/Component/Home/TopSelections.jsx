@@ -1,56 +1,58 @@
 import React from "react";
 
+
 export function TopSelections() {
-  // Define your specializations, each with its own bg color class
   const specializations = [
-    { icon: '🫀', name: 'Cardiologist', color: 'bg-blue-200' },
-    { icon: '🧠', name: 'Neurologist', color: 'bg-blue-200' },
-    { icon: '🦴', name: 'Orthopedic', color: 'bg-blue-200' },
-    { icon: '👁️', name: 'Eye Specialist', color: 'bg-blue-200' },
+    {
+      icon: "🫀",
+      name: "Cardiologist",
+      color: "from-red-100 to-red-200",
+    },
+    {
+      icon: "🧠",
+      name: "Neurologist",
+      color: "from-purple-100 to-purple-200",
+    },
+    {
+      icon: "🦴",
+      name: "Orthopedic",
+      color: "from-yellow-100 to-yellow-200",
+    },
+    {
+      icon:"👁",
+      name: "Eye Specialist",
+      color: "from-blue-100 to-blue-200",
+    },
   ];
 
   return (
-    <div>
-      {/* Specializations */}
-      <section className="px-6 py-10">
-        <h2 className="text-3xl font-semibold mb-4">Top Specializations</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {specializations.map((item) => (
-            <div
-              key={item.name}
-              className="border rounded-lg p-6 flex flex-col items-center shadow hover:shadow-md transition"
-            >
-              {/* Icon wrapper with unique bg color */}
-              <div className={` p-4  rounded-full mb-3 text-4xl ${item.color}`}>
-                {item.icon}
-              </div>
-              <span className="font-medium text-lg">{item.name}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+      <main className="pt-10 pb-20 px-6 md:px-12 lg:px-24">
+        <h2 className="text-4xl font-extrabold text-center text-green-800 mb-10">
+          Top Specializations
+        </h2>
 
-      {/* Trusted Hospitals */}
-      <section className="px-6 pb-10">
-        <h2 className="text-2xl font-semibold mb-4">Trusted Hospitals</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[1, 2, 3, 4].map((i) => (
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {specializations.map((spec) => (
             <div
-              key={i}
-              className="border p-4 rounded shadow hover:shadow-md transition"
+              key={spec.name}
+              className="flex flex-col items-center bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gray-200 rounded" />
-                <div>
-                  <h3 className="font-semibold">Hospital</h3>
-                  <div className="text-yellow-500">★★★★★</div>
-                  <p className="text-sm text-gray-600">Address line {i}</p>
-                </div>
+              <div
+                className={`p-5 mb-4 rounded-full bg-gradient-to-br ${spec.color} text-green-800 text-3xl`}
+              >
+                {spec.icon}
               </div>
+              <h3 className="font-semibold text-xl text-gray-800 mb-2">
+                {spec.name}
+              </h3>
+              <p className="text-center text-gray-600 text-sm">
+                Browse top-rated {spec.name.toLowerCase()} specialists near you.
+              </p>
             </div>
           ))}
         </div>
-      </section>
+      </main>
     </div>
   );
 }
