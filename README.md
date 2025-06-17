@@ -1,12 +1,26 @@
-# React + Vite
+SmartHealthSystem
+This repository contains the source code for SmartHealthSystem, a full-stack healthcare application designed to simplify appointment booking across hospitals and doctors throughout Sri Lanka.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Built with a Spring Boot (Java) backend and a ReactJS frontend following the MVC architecture, this system enables users to easily find hospitals, view doctors, and book appointments online. It includes complete CRUD (Create, Read, Update, Delete) functionalities for managing doctors, hospitals, and appointments. The system supports smooth data flow between the frontend and backend with RESTful APIs.
 
-Currently, two official plugins are available:
+Key Features:
+Appointment booking with any hospital or doctor in Sri Lanka
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Hospital and doctor management with CRUD operations
 
-## Expanding the ESLint configuration
+User-friendly React frontend for seamless interaction
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Backend built on Spring Boot with secure and scalable REST APIs
+
+MVC architecture for clear separation of concerns
+
+Technologies Used:
+Backend: Spring Boot (Java), REST API
+
+Frontend: ReactJS
+
+Database: (you can mention the DB used if you want, e.g., WorkBench)
+
+Architecture: MVC
+
+This project aims to modernize healthcare appointment systems by providing an accessible and efficient platform for patients and healthcare providers alike.
