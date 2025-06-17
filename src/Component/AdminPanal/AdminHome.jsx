@@ -1,10 +1,9 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import  AdminDash  from "./AdminDash";
-import { Pharmacy } from "./Pharmacy";
 import { Doctors } from "./Doctors";
 import { Patients } from "./Patients";
 import Profile from "./Profile";
-import Users from "./Users";
+import EditHospital from "./EditHospital";
 
 export default function AdminHome() {
   const location = useLocation();
@@ -26,28 +25,27 @@ export default function AdminHome() {
         <h2 className="text-2xl font-bold mb-12 text-white">Admin Panel</h2>
 
         <Link to="/AdminHome/AdminDash" className={`${getLinkClass("")} ${animatedLinkClass}`}>
-          Dashboard
+          Dashboard Overview
         </Link>
-        <Link to="/AdminHome/Profile" className={`${getLinkClass("Profile")} ${animatedLinkClass}`}>
-          Profile
+        <Link to="/AdminHome/ManageUsers" className={`${getLinkClass("ManageUsers")} ${animatedLinkClass}`}>
+           Manage Users
         </Link>
-        <Link to="/AdminHome/Users" className={`${getLinkClass("Users")} ${animatedLinkClass}`}>
-          Users
-        </Link>
-        <Link to="/AdminHome/Pharmacy" className={`${getLinkClass("Pharmacy")} ${animatedLinkClass}`}>
-          Pharmacy
-        </Link>
-        <Link to="/AdminHome/Patients" className={`${getLinkClass("Patients")} ${animatedLinkClass}`}>
-          Patients
-        </Link>
+        
         <Link to="/AdminHome/Doctors" className={`${getLinkClass("Doctors")} ${animatedLinkClass}`}>
-          Doctors
+           Manage Doctors
         </Link>
-        <Link to="/AdminHome/pageoverview" className={`${getLinkClass("pageoverview")} ${animatedLinkClass}`}>
-          Page Overview
+        <Link to="/AdminHome/EditHospital" className={`${getLinkClass("EditHospital")} ${animatedLinkClass}`}>
+         Manage Hospitals
         </Link>
-        <Link to="/AdminHome/logout" className={`${getLinkClass("logout")} ${animatedLinkClass}`}>
-          LogOut
+        
+        <Link to="/AdminHome/appointments" className={`${getLinkClass("appointments")} ${animatedLinkClass}`}>
+           Manage Appointments
+        </Link>
+        <Link to="/AdminHome/ViewFeedback" className={`${getLinkClass("ViewFeedback")} ${animatedLinkClass}`}>
+           View Feedback
+        </Link>
+        <Link to="/AdminHome/ReportsViewer" className={`${getLinkClass("ReportsViewer")} ${animatedLinkClass}`}>
+          Reports Viewer
         </Link>
       </nav>
 
@@ -55,12 +53,13 @@ export default function AdminHome() {
       <main className="h-full bg-gray-400 flex-1 rounded-3xl p-6 overflow-y-auto text-white">
         <Routes>
           <Route path="AdminDash" element={<AdminDash />} />
-          <Route path="Pharmacy" element={<Pharmacy />} />
           <Route path="Patients" element={<Patients />} />
+          <Route path="ViewFeedback" element={<h1 className="text-3xl font-semibold">View Feedback</h1>} />
+          <Route path="ReportsViewer" element={<h1 className="text-3xl font-semibold">Reports Viewer</h1>} />
+          <Route path="appointments" element={<h1 className="text-3xl font-semibold">Manage Appointments</h1>} />
           <Route path="Doctors" element={<Doctors />} />
-          <Route path="Users" element={<Users />} />
-          <Route path="Profile" element={<Profile />} />
-          <Route path="pageoverview" element={<h1 className="text-3xl font-semibold">Page Overview</h1>} />
+          <Route path="EditHospital" element={<EditHospital />} />
+          <Route path="ManageUsers" element={<Profile />} />
           <Route path="logout" element={<h1 className="text-3xl font-semibold">Logging Out...</h1>} />
         </Routes>
       </main>

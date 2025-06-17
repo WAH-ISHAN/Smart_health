@@ -6,8 +6,9 @@ export default function Register() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    username: "",
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -27,19 +28,17 @@ export default function Register() {
     }
 
     try {
-      // 🔗 Connect to Spring Boot Backend API
-      const res = await axios.post("http://localhost:8080/api/register", {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+      const res = await axios.post(import.meta.env.VITE_API_URL + "/users/register", {
+        username: formData.username,
+        firstname: formData.firstname,
+        lastname: formData.lastname,
         email: formData.email,
-        phone: formData.phone,
         password: formData.password,
       });
 
       console.log("Registration Success:", res.data);
       alert("Registration successful!");
 
-      // redirect to login after successful registration
       navigate("/login");
     } catch (err) {
       console.error("Registration failed:", err.response?.data || err.message);
@@ -56,8 +55,17 @@ export default function Register() {
 
         <form className="space-y-5" onSubmit={handleSubmit}>
           <input
-            name="firstName"
-            value={formData.firstName}
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            type="text"
+            placeholder="Username"
+            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md focus:outline-none"
+            required
+          />
+          <input
+            name="firstname"
+            value={formData.firstname}
             onChange={handleChange}
             type="text"
             placeholder="First Name"
@@ -65,8 +73,8 @@ export default function Register() {
             required
           />
           <input
-            name="lastName"
-            value={formData.lastName}
+            name="lastname"
+            value={formData.lastname}
             onChange={handleChange}
             type="text"
             placeholder="Last Name"

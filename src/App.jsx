@@ -5,6 +5,7 @@ import Register from "./Component/Login/Register";
 import Home from "./Component/Home/HomePage";
 import { Userpage } from "./Component/Home/Userpage";
 import HospitalList from "./Component/Home/HospitalList";
+import BookingPage from"./Component/Home/booking";
 
 
 function App() {
@@ -16,7 +17,8 @@ function App() {
         <Route path="/Login" element={<LoginPage />} />
         <Route path="/Register" element={<Register />} />
         <Route path="/Userpage" element={<Userpage />} />
-        <Route path="/HospitalList/*" element={<HospitalList />} />
+        <Route path="/HospitalList" element={<HospitalList />} />
+        <Route path="/Booking" element={<BookingPage />} />
       </Routes>
     </BrowserRouter>
   );
