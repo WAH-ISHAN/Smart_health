@@ -4,6 +4,7 @@ import { Doctors } from "./Doctors";
 import { Patients } from "./Patients";
 import Profile from "./Profile";
 import EditHospital from "./EditHospital";
+import ViewFeedback from "./ViewFeedback";
 
 export default function AdminHome() {
   const location = useLocation();
@@ -54,7 +55,7 @@ export default function AdminHome() {
         <Routes>
           <Route path="AdminDash" element={<AdminDash />} />
           <Route path="Patients" element={<Patients />} />
-          <Route path="ViewFeedback" element={<h1 className="text-3xl font-semibold">View Feedback</h1>} />
+          <Route path="ViewFeedback" element={<ViewFeedback/>} />
           <Route path="ReportsViewer" element={<h1 className="text-3xl font-semibold">Reports Viewer</h1>} />
           <Route path="appointments" element={<h1 className="text-3xl font-semibold">Manage Appointments</h1>} />
           <Route path="Doctors" element={<Doctors />} />
