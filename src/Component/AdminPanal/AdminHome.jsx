@@ -6,6 +6,7 @@ import ManageUsersAdminPanel from "./ManageUsersAdminPanel";
 import EditHospital from "./EditHospital";
 import ViewFeedback from "./ViewFeedback";
 import AppointmentsManager from "./Appointments";
+import ReportsViewer from "./ReportView";
 
 export default function AdminHome() {
   const location = useLocation();
@@ -57,7 +58,7 @@ export default function AdminHome() {
           <Route path="AdminDash" element={<AdminDash />} />
           <Route path="Patients" element={<Patients />} />
           <Route path="ViewFeedback" element={<ViewFeedback/>} />
-          <Route path="ReportsViewer" element={<h1 className="text-3xl font-semibold">Reports Viewer</h1>} />
+          <Route path="ReportsViewer" element={<ReportsViewer />} />
           <Route path="appointments" element={<AppointmentsManager/>} />
           <Route path="Doctors" element={<Doctors />} />
           <Route path="EditHospital" element={<EditHospital />} />
