@@ -106,7 +106,6 @@ export default function BookingPage() {
     };
 
     try {
-      // TODO: Change URL to your backend API
       const response = await axios.post('http://localhost:8080/api/bookings', bookingData);
 
       if (response.status === 201 || response.status === 200) {
@@ -147,7 +146,27 @@ export default function BookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col items-center justify-start p-4">
+      
+      {/* Doctor Schedule Display */}
+      {selectedDoctorId && selectedDate && (
+        <div className="bg-white p-6 rounded-xl shadow-md mb-6 max-w-lg w-full">
+          <h2 className="text-xl font-bold text-green-800 mb-2">Doctor's Schedule</h2>
+          <p className="text-gray-700 mb-4">
+            <strong>{selectedDoctor?.name}</strong> on <strong>{selectedDate}</strong>
+          </p>
+          <ul className="list-disc list-inside text-gray-700">
+            {bookedSlots.length > 0 ? (
+              bookedSlots.map((slot, index) => (
+                <li key={index} className="text-red-600">{slot} (Booked)</li>
+              ))
+            ) : (
+              <li className="text-green-600">No bookings yet for this day.</li>
+            )}
+          </ul>
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-2xl shadow-lg max-w-lg w-full space-y-6"

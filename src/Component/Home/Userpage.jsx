@@ -28,11 +28,18 @@ const InfoCard = ({ icon, title, description, buttonText, buttonColor, onClick }
 export function Userpage() {
   const navigate = useNavigate();
 
-  const handleHospitalSearch = () => alert("Hospital search clicked");
-  const handleDoctorSearch = () => alert("Doctor search clicked");
+  const handleHospitalSearch = () =>{
+    navigate("/HospitalList");
+    
+  }
+  const handleDoctorSearch = () => {
+    navigate("/DoctorList");
+  };
   const handleBookAppointment = () => {
+   
     navigate("/Booking");
   };
+
   const handleViewHealthTips = () => alert("View health tips clicked");
 
   return (

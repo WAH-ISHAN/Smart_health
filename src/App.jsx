@@ -6,6 +6,7 @@ import Home from "./Component/Home/HomePage";
 import { Userpage } from "./Component/Home/Userpage";
 import HospitalList from "./Component/Home/HospitalList";
 import BookingPage from"./Component/Home/booking";
+import DoctorList from "./Component/Home/Doctor";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/Register" element={<Register />} />
         <Route path="/Userpage" element={<Userpage />} />
         <Route path="/HospitalList" element={<HospitalList />} />
+        <Route path="/DoctorList" element={<DoctorList />} />
         <Route path="/Booking" element={<BookingPage />} />
       </Routes>
     </BrowserRouter>
