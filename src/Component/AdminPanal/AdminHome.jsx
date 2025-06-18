@@ -2,7 +2,7 @@ import { Link, Route, Routes, useLocation } from "react-router-dom";
 import  AdminDash  from "./AdminDash";
 import { Doctors } from "./Doctors";
 import { Patients } from "./Patients";
-import Profile from "./Profile";
+import ManageUsersAdminPanel from "./ManageUsersAdminPanel";
 import EditHospital from "./EditHospital";
 import ViewFeedback from "./ViewFeedback";
 
@@ -60,7 +60,7 @@ export default function AdminHome() {
           <Route path="appointments" element={<h1 className="text-3xl font-semibold">Manage Appointments</h1>} />
           <Route path="Doctors" element={<Doctors />} />
           <Route path="EditHospital" element={<EditHospital />} />
-          <Route path="ManageUsers" element={<Profile />} />
+          <Route path="ManageUsers" element={<ManageUsersAdminPanel/>} />
           <Route path="logout" element={<h1 className="text-3xl font-semibold">Logging Out...</h1>} />
         </Routes>
       </main>
