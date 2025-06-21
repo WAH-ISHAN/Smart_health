@@ -147,7 +147,6 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col items-center justify-start p-4">
-      
       {/* Doctor Schedule Display */}
       {selectedDoctorId && selectedDate && (
         <div className="bg-white p-6 rounded-xl shadow-md mb-6 max-w-lg w-full">

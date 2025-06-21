@@ -10,10 +10,10 @@ const InfoCard = ({ icon, title, description, buttonText, buttonColor, onClick }
   <section className="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between hover:shadow-lg transition-shadow duration-300 transform hover:scale-105">
     <header>
       <div className="flex items-center mb-3">
-        <span className="text-3xl mr-2">{icon}</span>
+        <span className="text-4xl mr-2">{icon}</span>
         <h2 className={`text-xl font-semibold ${buttonColor.textColor}`}>{title}</h2>
       </div>
-      <p className="text-gray-500 text-sm leading-relaxed">{description}</p>
+      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
     </header>
     <button
       onClick={onClick}
@@ -28,15 +28,15 @@ const InfoCard = ({ icon, title, description, buttonText, buttonColor, onClick }
 export function Userpage() {
   const navigate = useNavigate();
 
-  const handleHospitalSearch = () =>{
+  const handleHospitalSearch = () => {
     navigate("/HospitalList");
-    
-  }
+  };
+
   const handleDoctorSearch = () => {
     navigate("/DoctorList");
   };
+
   const handleBookAppointment = () => {
-   
     navigate("/Booking");
   };
 
@@ -48,7 +48,7 @@ export function Userpage() {
       <main className="flex-grow max-w-6xl mx-auto px-4 py-8">
         <SearchBar className="w-full mb-6" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <InfoCard
             icon="🏥"
             title="Find a Hospital"
@@ -101,3 +101,5 @@ export function Userpage() {
     </div>
   );
 }
+
+export default Userpage;

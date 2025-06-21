@@ -26,78 +26,91 @@ export default function ReportsViewer() {
   );
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen rounded-lg">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Reports Viewer</h1>
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="bg-blue-600 text-white p-4">
+        <h1 className="text-2xl font-bold">SmartHealth Reports Viewer</h1>
+      </header>
 
-      {/* Search Bar */}
-      <div className="flex items-center bg-white shadow rounded-md p-3 mb-6 w-full md:w-1/2">
-        <FaSearch className="text-gray-400 mr-2" />
-        <input
-          type="text"
-          className="w-full outline-none"
-          placeholder="Search reports..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      {/* Main Content */}
+      <main className="flex-grow p-6">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800">Reports Viewer</h1>
 
-      {/* Table */}
-      <div className="bg-white shadow rounded-xl overflow-hidden">
-        <table className="min-w-full text-sm">
-          <thead className="bg-blue-600 text-white">
-            <tr>
-              <th className="p-3">#</th>
-              <th className="p-3">Title</th>
-              <th className="p-3">Patient</th>
-              <th className="p-3">Date</th>
-              <th className="p-3">Status</th>
-              <th className="p-3 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredReports.length > 0 ? (
-              filteredReports.map((report, index) => (
-                <tr key={report.id} className="border-b hover:bg-gray-50">
-                  <td className="p-3">{index + 1}</td>
-                  <td className="p-3 font-medium">{report.title}</td>
-                  <td className="p-3">{report.patient}</td>
-                  <td className="p-3">{report.date}</td>
-                  <td className="p-3">
-                    <span
-                      className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                        report.status === "Completed"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {report.status}
-                    </span>
-                  </td>
-                  <td className="p-3 text-center">
-                    <div className="flex justify-center gap-2">
-                      <button className="text-blue-600 hover:text-blue-800">
-                        <FaEye />
-                      </button>
-                      <button className="text-green-600 hover:text-green-800">
-                        <FaDownload />
-                      </button>
-                      <button className="text-gray-600 hover:text-gray-800">
-                        <FaPrint />
-                      </button>
-                    </div>
+        {/* Search Bar */}
+        <div className="flex items-center bg-white shadow rounded-md p-3 mb-6 w-full md:w-1/2">
+          <FaSearch className="text-gray-400 mr-2" />
+          <input
+            type="text"
+            className="w-full outline-none"
+            placeholder="Search reports..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {/* Table */}
+        <div className="bg-white shadow rounded-xl overflow-hidden">
+          <table className="min-w-full text-sm">
+            <thead className="bg-blue-600 text-white">
+              <tr>
+                <th className="p-3">#</th>
+                <th className="p-3">Title</th>
+                <th className="p-3">Patient</th>
+                <th className="p-3">Date</th>
+                <th className="p-3">Status</th>
+                <th className="p-3 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredReports.length > 0 ? (
+                filteredReports.map((report, index) => (
+                  <tr key={report.id} className="border-b hover:bg-gray-50">
+                    <td className="p-3">{index + 1}</td>
+                    <td className="p-3 font-medium">{report.title}</td>
+                    <td className="p-3">{report.patient}</td>
+                    <td className="p-3">{report.date}</td>
+                    <td className="p-3">
+                      <span
+                        className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                          report.status === "Completed"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {report.status}
+                      </span>
+                    </td>
+                    <td className="p-3 text-center">
+                      <div className="flex justify-center gap-2">
+                        <button className="text-blue-600 hover:text-blue-800">
+                          <FaEye />
+                        </button>
+                        <button className="text-green-600 hover:text-green-800">
+                          <FaDownload />
+                        </button>
+                        <button className="text-gray-600 hover:text-gray-800">
+                          <FaPrint />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center p-4 text-gray-500">
+                    No reports found.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="text-center p-4 text-gray-500">
-                  No reports found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-200 text-center p-4">
+        <p className="text-gray-600">© 2025 SmartHealth. All rights reserved.</p>
+      </footer>
     </div>
   );
 }

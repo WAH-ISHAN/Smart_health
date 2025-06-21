@@ -52,33 +52,33 @@ export default function AdminDash() {
   }, []);
 
   return (
-    <div className="p-6  text-white min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+    <div className="p-6 text-gray-900 min-h-screen bg-gray-100">
+      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-      {/* Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Cards Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {cards.map((c, i) => (
           <div
             key={i}
             className={`${c.bg} p-4 rounded-lg shadow-md flex flex-col justify-between`}
           >
             <div className="text-3xl font-bold">{c.value}</div>
-            <div className="mt-2">{c.title}</div>
-            <button className="mt-4 text-sm underline self-start">
+            <div className="mt-2 text-sm">{c.title}</div>
+            <button className="mt-4 text-sm underline text-blue-500 hover:text-blue-700">
               More info →
             </button>
           </div>
         ))}
       </div>
 
-      {/* Availability + Chart */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+      {/* Availability + Chart Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Doctor Availability */}
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+        <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-3">Doctor's Availability</h2>
           <ul className="space-y-2">
             {doctors.map((d, idx) => (
-              <li key={idx} className="bg-green-700 p-2 rounded">
+              <li key={idx} className="bg-green-200 p-2 rounded">
                 {d}
               </li>
             ))}
@@ -86,14 +86,15 @@ export default function AdminDash() {
         </div>
 
         {/* Today's Appointments Chart */}
-        <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+        <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-semibold mb-3">Today's Appointments</h2>
           <Doughnut data={chartData} />
         </div>
       </div>
 
-      {/* Calendar */}
-      <div className="mt-8 bg-gray-800 p-4 rounded-lg shadow-md">
+      {/* Calendar Section */}
+      <div className="bg-white p-4 rounded-lg shadow-md">
+        <h2 className="text-lg font-semibold mb-3">Calendar</h2>
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
