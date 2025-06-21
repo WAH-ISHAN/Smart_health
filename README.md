@@ -24,3 +24,4 @@ Database: (you can mention the DB used if you want, e.g., WorkBench)
 Architecture: MVC
 
 This project aims to modernize healthcare appointment systems by providing an accessible and efficient platform for patients and healthcare providers alike.
+{}
