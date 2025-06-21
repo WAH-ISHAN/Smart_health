@@ -52,7 +52,7 @@ export default function AdminDash() {
   }, []);
 
   return (
-    <div className="p-6 text-gray-900 min-h-screen bg-gray-100">
+    <div className="p-6 text-gray-900 min-h-screen ">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
       {/* Cards Section */}
