@@ -7,8 +7,7 @@ import { Userpage } from "./Component/Home/Userpage";
 import HospitalList from "./Component/Home/HospitalList";
 import BookingPage from"./Component/Home/booking";
 import DoctorList from "./Component/Home/Doctor";
-import DoctorProfileSchedule from "./Component/Home/doctorhomepage";
-import PatientProfile from "./Component/Home/Profile";
+
 
 function App() {
   return (
@@ -22,8 +21,8 @@ function App() {
         <Route path="/HospitalList" element={<HospitalList />} />
         <Route path="/DoctorList" element={<DoctorList />} />
         <Route path="/Booking" element={<BookingPage />} />
-        <Route path="/DoctorProfileSchedule" element={<DoctorProfileSchedule />} />
-        <Route path="/PatientProfile" element={<PatientProfile />} />
+       
+        
       </Routes>
     </BrowserRouter>
   );
