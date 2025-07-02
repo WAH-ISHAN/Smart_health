@@ -1,6 +1,6 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import  AdminDash  from "./AdminDash";
-import { Doctors } from "./Doctors";
+import  Doctors  from "./Doctors";
 import { Patients } from "./Patients";
 import ManageUsersAdminPanel from "./ManageUsersAdminPanel";
 import EditHospital from "./EditHospital";

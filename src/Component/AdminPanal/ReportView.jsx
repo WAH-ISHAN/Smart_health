@@ -8,7 +8,7 @@ export default function ReportsViewer() {
 
   // Fetch reports from backend
   useEffect(() => {
-    fetch("http://localhost:8080/reports")
+    fetch(import.meta.env.VITE_API_URL + "/reports")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch reports");
         return res.json();

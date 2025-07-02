@@ -7,7 +7,7 @@ import {
   FaFileMedical, FaPrescription, FaCalendarCheck, FaFilePdf
 } from 'react-icons/fa';
 
-const PatientProfile = () => {
+export function PatientProfile() {
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);

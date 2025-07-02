@@ -19,17 +19,17 @@ export default function AdminDash() {
 
   useEffect(() => {
     // Fetch Cards
-    axios.get('http://localhost:8080/api/dashboard/cards')
+    axios.get(import.meta.env.VITE_API_URL + "/dashboard/cards")
       .then(res => setCards(res.data))
       .catch(err => console.error('Cards error:', err));
 
     // Fetch Doctors
-    axios.get('http://localhost:8080/api/doctors/availability')
+    axios.get(import.meta.env.VITE_API_URL + "/doctors/availability")
       .then(res => setDoctors(res.data))
       .catch(err => console.error('Doctors error:', err));
 
     // Fetch Chart Data
-    axios.get('http://localhost:8080/api/appointments/today')
+    axios.get(import.meta.env.VITE_API_URL + "/appointments/today")
       .then(res => {
         const labels = res.data.map(item => item.name);
         const data = res.data.map(item => item.count);
@@ -46,7 +46,7 @@ export default function AdminDash() {
       .catch(err => console.error('Chart data error:', err));
 
     // Fetch Calendar Events
-    axios.get('http://localhost:8080/api/calendar/events')
+    axios.get(import.meta.env.VITE_API_URL + "/calendar/events")
       .then(res => setCalendarEvents(res.data))
       .catch(err => console.error('Calendar events error:', err));
   }, []);

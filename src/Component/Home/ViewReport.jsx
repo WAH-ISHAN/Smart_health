@@ -6,7 +6,7 @@ const ViewReports = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/reports")
+      .get(import.meta.env.VITE_API_URL + "/reports")
       .then((res) => setReports(res.data))
       .catch((err) => console.error("Failed to fetch reports:", err));
   }, []);

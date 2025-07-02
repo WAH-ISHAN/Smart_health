@@ -6,7 +6,7 @@ const MyAppointments = () => {
   const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/appointments')
+   axios.get(import.meta.env.VITE_API_URL + "/appointments")
       .then(res => setAppointments(res.data))
       .catch(err => console.error(err));
   }, []);

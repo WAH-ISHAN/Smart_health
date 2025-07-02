@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Feedback = () => {
-  const [rating, setRating] = useState(0);
+export function Feedback () {
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
   const handleSubmit = async () => {
+    if (!userName || !email || !message) {
+      alert('Please fill all fields');
+      return;
+    }
+
     try {
-      await axios.post('/api/feedback', { rating, message });
+      const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd format
+
+      await axios.post(import.meta.env.VITE_API_URL + "/feedback", {
+        userName,
+        email,
+        message,
+        date: today,
+      });
+
       alert('Feedback submitted');
-      setRating(0);
+      setUserName('');
+      setEmail('');
       setMessage('');
     } catch (err) {
       console.error(err);
@@ -18,13 +33,39 @@ const Feedback = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen max-w-md mx-auto">
       <h2 className="text-2xl font-bold mb-6 text-blue-700">Submit Feedback</h2>
       <div className="bg-white p-6 rounded-xl shadow-md">
-        <label className="block mb-2">Rating (1-5):</label>
-        <input type="number" min="1" max="5" value={rating} onChange={(e) => setRating(e.target.value)} className="mb-4 border p-2 rounded w-full" />
-        <textarea value={message} onChange={(e) => setMessage(e.target.value)} className="w-full p-3 border rounded mb-4" placeholder="Write your feedback..." rows="4"></textarea>
-        <button onClick={handleSubmit} className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Submit</button>
+        <label className="block mb-2">Name:</label>
+        <input
+          type="text"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          className="mb-4 border p-2 rounded w-full"
+          placeholder="Your name"
+        />
+        <label className="block mb-2">Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="mb-4 border p-2 rounded w-full"
+          placeholder="Your email"
+        />
+        <label className="block mb-2">Message:</label>
+        <textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          className="w-full p-3 border rounded mb-4"
+          placeholder="Write your feedback..."
+          rows="4"
+        ></textarea>
+        <button
+          onClick={handleSubmit}
+          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        >
+          Submit
+        </button>
       </div>
     </div>
   );

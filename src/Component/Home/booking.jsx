@@ -1,142 +1,112 @@
-import React, { useState } from 'react';
-import { FaCalendarAlt } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaCalendarAlt } from 'react-icons/fa';
 
-const hospitals = [
-  { id: 1, name: 'City Hospital' },
-  { id: 2, name: 'Green Valley Clinic' },
-  { id: 3, name: 'Sunrise Medical Center' },
-];
-
-const doctorsByHospital = {
-  1: [
-    { id: 101, name: 'Dr. Anjali Perera' },
-    { id: 102, name: 'Dr. Nimal Fernando' },
-  ],
-  2: [
-    { id: 201, name: 'Dr. Tharushi Wijesinghe' },
-    { id: 202, name: 'Dr. Ravi Seneviratne' },
-  ],
-  3: [
-    { id: 301, name: 'Dr. Malith Jayasena' },
-  ],
-};
-
-const availableSlots = [
-  '09:00 AM', '10:00 AM', '11:00 AM',
-  '01:00 PM', '02:00 PM', '03:00 PM',
-];
-
-const mockBookedSlots = {
-  101: {
-    '2025-06-20': ['10:00 AM', '01:00 PM'],
-    '2025-06-21': ['09:00 AM'],
-  },
-  102: {
-    '2025-06-20': ['11:00 AM'],
-  },
-  201: {},
-  202: {
-    '2025-06-20': ['09:00 AM', '02:00 PM'],
-  },
-  301: {
-    '2025-06-20': ['03:00 PM'],
-  },
-};
-
-export default function BookingPage() {
+const BookingPage = () => {
+  const [hospitals, setHospitals] = useState([]);
+  const [doctors, setDoctors] = useState([]);
   const [selectedHospitalId, setSelectedHospitalId] = useState('');
   const [selectedDoctorId, setSelectedDoctorId] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
-  const [selectedSlot, setSelectedSlot] = useState('');
+  const [selectedTimeSlotId, setSelectedTimeSlotId] = useState('');
   const [patientName, setPatientName] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [fetchingHospitals, setFetchingHospitals] = useState(false);
+  const [fetchingDoctors, setFetchingDoctors] = useState(false);
+  const [error, setError] = useState('');
 
-  const doctors = selectedHospitalId ? doctorsByHospital[Number(selectedHospitalId)] || [] : [];
-  const selectedDoctor = doctors.find(d => d.id === Number(selectedDoctorId)) || null;
-  const bookedSlots = (selectedDoctorId && selectedDate)
-    ? mockBookedSlots[Number(selectedDoctorId)]?.[selectedDate] || []
-    : [];
+  const userId = 1; // TODO: replace with actual logged-in user ID
 
-  const canSubmit = selectedHospitalId && selectedDoctorId && selectedDate && selectedSlot && patientName.trim();
+  const timeSlots = [
+    { id: 1, timeRange: '09:00 AM - 10:00 AM' },
+    { id: 2, timeRange: '10:00 AM - 11:00 AM' },
+    { id: 3, timeRange: '11:00 AM - 12:00 PM' },
+    { id: 4, timeRange: '02:00 PM - 03:00 PM' },
+    { id: 5, timeRange: '03:00 PM - 04:00 PM' },
+  ];
 
-  const handleHospitalChange = (e) => {
-    setSelectedHospitalId(e.target.value);
-    setSelectedDoctorId('');
-    setSelectedDate('');
-    setSelectedSlot('');
-    setErrorMessage('');
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      setFetchingHospitals(true);
+      setError('');
+      try {
+        const hospitalRes = await axios.get(import.meta.env.VITE_API_URL + "/hospitals");
+        setHospitals(hospitalRes.data);
+      } catch (err) {
+        console.error('Error loading hospitals:', err);
+        setError('Failed to load hospitals. Please check backend or login.');
+      } finally {
+        setFetchingHospitals(false);
+      }
 
-  const handleDoctorChange = (e) => {
-    setSelectedDoctorId(e.target.value);
-    setSelectedDate('');
-    setSelectedSlot('');
-    setErrorMessage('');
-  };
+      setFetchingDoctors(true);
+      try {
+        const doctorRes = await axios.get(import.meta.env.VITE_API_URL + "/doctor");
+        setDoctors(doctorRes.data);
+      } catch (err) {
+        console.error('Error loading doctors:', err);
+        setError(prev => prev ? prev + ' Also failed to load doctors.' : 'Failed to load doctors.');
+      } finally {
+        setFetchingDoctors(false);
+      }
+    };
 
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-    setSelectedSlot('');
-    setErrorMessage('');
-  };
+    fetchData();
+  }, []);
 
-  const handleSlotClick = (slot) => {
-    if (!bookedSlots.includes(slot)) {
-      setSelectedSlot(slot);
-      setErrorMessage('');
-    }
-  };
-
-  const handleSubmit = async (e) => {
+  const handleBooking = async (e) => {
     e.preventDefault();
-    if (!canSubmit) return;
+
+    if (!selectedHospitalId || !selectedDoctorId || !selectedDate || !selectedTimeSlotId || !patientName.trim()) {
+      setError('Please fill all fields.');
+      return;
+    }
 
     setLoading(true);
-    setErrorMessage('');
+    setError('');
 
-    const bookingData = {
+    const payload = {
+      userId,
       hospitalId: Number(selectedHospitalId),
       doctorId: Number(selectedDoctorId),
-      date: selectedDate,
-      timeSlot: selectedSlot,
+      appointmentDate: selectedDate,
+      timeSlotId: Number(selectedTimeSlotId),
       patientName: patientName.trim(),
     };
 
     try {
-      const response = await axios.post('http://localhost:8080/api/bookings', bookingData);
-
+      const response = await axios.post(import.meta.env.VITE_API_URL + '/appointment', payload);
       if (response.status === 201 || response.status === 200) {
         setSubmitted(true);
       } else {
-        setErrorMessage('Booking failed. Please try again.');
+        setError('Booking failed. Please try again.');
       }
-    } catch (error) {
-      if (error.response?.data?.message) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage('Server error. Please try again later.');
-      }
+    } catch (err) {
+      console.error('Booking error:', err);
+      setError('Server error. Please try again later.');
     } finally {
       setLoading(false);
     }
   };
 
+  const selectedDoctor = doctors.find(d => Number(d.id) === Number(selectedDoctorId));
+  const selectedHospital = hospitals.find(h => Number(h.id) === Number(selectedHospitalId));
+
   if (submitted) {
-    const hospitalName = hospitals.find(h => h.id === Number(selectedHospitalId))?.name || '';
     return (
-      <div className="min-h-screen bg-green-50 flex items-center justify-center p-4">
-        <div className="bg-white p-8 rounded-xl shadow-md max-w-md text-center">
-          <h2 className="text-2xl font-bold text-green-700 mb-4">Booking Confirmed!</h2>
-          <p className="text-gray-700 mb-2">Thank you, {patientName}.</p>
-          <p className="text-gray-700 mb-4">
-            Your appointment with {selectedDoctor?.name} at {hospitalName} on {selectedDate} at {selectedSlot} is booked.
+      <div className="min-h-screen flex justify-center items-center bg-green-100 p-8">
+        <div className="bg-white p-6 rounded-xl text-center shadow">
+          <h2 className="text-2xl text-green-700 font-bold">Booking Confirmed!</h2>
+          <p className="mt-4">Thank you, {patientName}. Your appointment has been saved.</p>
+          <p className="text-sm text-gray-700 mt-2">
+            <strong>Doctor:</strong> {selectedDoctor?.name}<br />
+            <strong>Hospital:</strong> {selectedHospital?.name}<br />
+            <strong>Date:</strong> {selectedDate}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 border border-green-600 text-green-600 rounded hover:bg-green-50 transition focus:outline-none focus:ring-2 focus:ring-green-600"
+            className="mt-6 px-4 py-2 border border-green-700 rounded text-green-700 hover:bg-green-50"
           >
             Book Another
           </button>
@@ -146,148 +116,112 @@ export default function BookingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 to-white flex flex-col items-center justify-start p-4">
-      {/* Doctor Schedule Display */}
-      {selectedDoctorId && selectedDate && (
-        <div className="bg-white p-6 rounded-xl shadow-md mb-6 max-w-lg w-full">
-          <h2 className="text-xl font-bold text-green-800 mb-2">Doctor's Schedule</h2>
-          <p className="text-gray-700 mb-4">
-            <strong>{selectedDoctor?.name}</strong> on <strong>{selectedDate}</strong>
-          </p>
-          <ul className="list-disc list-inside text-gray-700">
-            {bookedSlots.length > 0 ? (
-              bookedSlots.map((slot, index) => (
-                <li key={index} className="text-red-600">{slot} (Booked)</li>
-              ))
-            ) : (
-              <li className="text-green-600">No bookings yet for this day.</li>
-            )}
-          </ul>
-        </div>
-      )}
+    <div className="min-h-screen bg-gray-50 flex justify-center p-4">
+      <form onSubmit={handleBooking} className="bg-white rounded-xl shadow p-8 w-full max-w-lg space-y-6">
+        <h1 className="text-3xl font-bold text-center text-green-800">Book Appointment</h1>
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-lg max-w-lg w-full space-y-6"
-        aria-label="Book an appointment form"
-      >
-        <h1 className="text-3xl font-extrabold text-center text-green-800">
-          Book an Appointment
-        </h1>
+        {error && <div className="bg-red-100 text-red-600 p-3 rounded">{error}</div>}
 
-        {errorMessage && (
-          <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-center" role="alert">
-            {errorMessage}
-          </div>
-        )}
-
+        {/* Hospital Selection */}
         <div>
-          <label htmlFor="hospital" className="block text-gray-700 mb-2 font-semibold">
-            Select Hospital
-          </label>
+          <label className="block mb-1 font-medium">Select Hospital</label>
+          {fetchingHospitals ? (
+            <p>Loading hospitals...</p>
+          ) : (
+            <select
+              value={selectedHospitalId}
+              onChange={e => {
+                setSelectedHospitalId(e.target.value);
+                setSelectedDoctorId('');
+              }}
+              className="w-full border rounded px-3 py-2"
+            >
+              <option value="">-- Select Hospital --</option>
+              {hospitals.map(h => (
+                <option key={h.id} value={h.id}>{h.name}</option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        {/* Doctor Selection */}
+        <div>
+          <label className="block mb-1 font-medium">Select Doctor</label>
+          {fetchingDoctors ? (
+            <p>Loading doctors...</p>
+          ) : (
+            <select
+              value={selectedDoctorId}
+              onChange={e => setSelectedDoctorId(e.target.value)}
+              className="w-full border rounded px-3 py-2"
+              disabled={!selectedHospitalId}
+            >
+              <option value="">-- Select Doctor --</option>
+              {doctors
+                .filter(d => {
+                  const hospitalId = d.hospitalId ?? d.hospital?.id;
+                  return Number(hospitalId) === Number(selectedHospitalId);
+                })
+                .map(d => (
+                  <option key={d.id} value={d.id}>{d.name}</option>
+                ))}
+            </select>
+          )}
+        </div>
+
+        {/* Appointment Date */}
+        <div>
+          <label className="block mb-1 font-medium">Appointment Date</label>
+          <div className="flex items-center gap-2">
+            <FaCalendarAlt className="text-green-600" />
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={e => setSelectedDate(e.target.value)}
+              className="border rounded px-3 py-2 w-full"
+              min={new Date().toISOString().split("T")[0]}
+            />
+          </div>
+        </div>
+
+        {/* Time Slot Selection */}
+        <div>
+          <label className="block mb-1 font-medium">Time Slot</label>
           <select
-            id="hospital"
-            value={selectedHospitalId}
-            onChange={handleHospitalChange}
-            className="w-full border border-green-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-500"
-            required
-            aria-required="true"
+            value={selectedTimeSlotId}
+            onChange={e => setSelectedTimeSlotId(e.target.value)}
+            className="w-full border rounded px-3 py-2"
           >
-            <option value="" disabled>-- Select Hospital --</option>
-            {hospitals.map(hospital => (
-              <option key={hospital.id} value={hospital.id}>{hospital.name}</option>
+            <option value="">-- Select Time Slot --</option>
+            {timeSlots.map(slot => (
+              <option key={slot.id} value={slot.id}>{slot.timeRange}</option>
             ))}
           </select>
         </div>
 
+        {/* Patient Name */}
         <div>
-          <label htmlFor="doctor" className="block text-gray-700 mb-2 font-semibold">
-            Select Doctor
-          </label>
-          <select
-            id="doctor"
-            value={selectedDoctorId}
-            onChange={handleDoctorChange}
-            className="w-full border border-green-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-500"
-            required
-            disabled={!selectedHospitalId}
-            aria-required="true"
-          >
-            <option value="" disabled>-- Select Doctor --</option>
-            {doctors.map(doc => (
-              <option key={doc.id} value={doc.id}>{doc.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <FaCalendarAlt className="text-green-500 text-xl" aria-hidden="true" />
+          <label className="block mb-1 font-medium">Your Name</label>
           <input
-            id="date"
-            type="date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            className="w-full border border-green-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-500"
-            required
-            disabled={!selectedDoctorId}
-            min={new Date().toISOString().split('T')[0]}
-            aria-required="true"
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 mb-2 font-semibold">Select Time Slot</label>
-          <div className="grid grid-cols-3 gap-3" role="list" aria-label="Available time slots">
-            {availableSlots.map(slot => {
-              const isBooked = bookedSlots.includes(slot);
-              return (
-                <button
-                  key={slot}
-                  type="button"
-                  onClick={() => handleSlotClick(slot)}
-                  className={`px-3 py-2 rounded-full border 
-                    ${selectedSlot === slot ? 'bg-green-600 text-white' : 'border-green-300 text-green-600'} 
-                    ${isBooked ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-50 cursor-pointer'}
-                    focus:outline-none focus:ring-2 focus:ring-green-600
-                  `}
-                  disabled={isBooked}
-                  aria-disabled={isBooked}
-                  aria-pressed={selectedSlot === slot}
-                >
-                  {slot}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="patientName" className="block text-gray-700 mb-2 font-semibold">
-            Patient Name
-          </label>
-          <input
-            id="patientName"
             type="text"
-            placeholder="Your Full Name"
             value={patientName}
             onChange={e => setPatientName(e.target.value)}
-            className="w-full border border-green-300 rounded px-4 py-2 focus:ring-2 focus:ring-green-500"
-            required
-            aria-required="true"
+            className="w-full border rounded px-3 py-2"
+            placeholder="Full name"
           />
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          disabled={!canSubmit || loading}
-          className={`w-full px-4 py-3 rounded-xl text-lg transition
-            ${canSubmit && !loading ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-green-300 text-green-600 cursor-not-allowed'}
-          `}
-          aria-busy={loading}
+          disabled={loading}
+          className={`w-full py-3 rounded text-white ${loading ? 'bg-green-300' : 'bg-green-600 hover:bg-green-700'}`}
         >
           {loading ? 'Booking...' : 'Confirm Booking'}
         </button>
       </form>
     </div>
   );
-}
+};
+
+export default BookingPage;

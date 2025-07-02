@@ -11,15 +11,8 @@ function AppointmentsManager() {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('/api/appointments');
-      const data = response.data;
-      const appointmentsArray = Array.isArray(data)
-        ? data
-        : Array.isArray(data.data)
-        ? data.data
-        : [];
-
-      setAppointments(appointmentsArray);
+      const response = await axios.get(import.meta.env.VITE_API_URL + '/all');
+      setAppointments(response.data);
     } catch (error) {
       console.error('Error fetching appointments:', error);
     }
@@ -27,18 +20,26 @@ function AppointmentsManager() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await axios.post('/api/appointments/update', {
-        appointment_id: id,
-        status: newStatus
-      });
+      // Find the appointment object to update
+      const apptToUpdate = appointments.find((appt) => appt.id === id);
+      if (!apptToUpdate) return;
+
+      // Create updated object with new status
+      const updatedAppointment = { ...apptToUpdate, status: newStatus };
+
+      // Call PUT /api/appointment/{id} to update
+      await axios.put(`${import.meta.env.VITE_API_URL}/${id}`, updatedAppointment);
+
+      // Refresh list after update
       fetchAppointments();
     } catch (error) {
       console.error('Error updating status:', error);
     }
   };
 
+  // Filter appointments by customer name or service type (adjust fields if needed)
   const filteredAppointments = appointments.filter((a) =>
-    `${a.customer_name} ${a.service_type}`
+    `${a.customerName || a.customer_name || ''} ${a.serviceType || a.service_type || ''}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
@@ -79,10 +80,10 @@ function AppointmentsManager() {
               filteredAppointments.map((appt, index) => (
                 <tr key={appt.id} className="border-b hover:bg-gray-50">
                   <td className="p-3">{index + 1}</td>
-                  <td className="p-3">{appt.customer_name}</td>
-                  <td className="p-3">{appt.service_type}</td>
-                  <td className="p-3">{appt.appointment_date}</td>
-                  <td className="p-3">{appt.appointment_time}</td>
+                  <td className="p-3">{appt.customerName || appt.customer_name}</td>
+                  <td className="p-3">{appt.serviceType || appt.service_type}</td>
+                  <td className="p-3">{appt.appointmentDate || appt.appointment_date}</td>
+                  <td className="p-3">{appt.appointmentTime || appt.appointment_time}</td>
                   <td className="p-3">
                     <span
                       className={`text-xs font-semibold px-2 py-1 rounded-full ${
@@ -101,9 +102,7 @@ function AppointmentsManager() {
                   <td className="p-3">
                     <select
                       value={appt.status}
-                      onChange={(e) =>
-                        handleStatusChange(appt.id, e.target.value)
-                      }
+                      onChange={(e) => handleStatusChange(appt.id, e.target.value)}
                       className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="Pending">Pending</option>

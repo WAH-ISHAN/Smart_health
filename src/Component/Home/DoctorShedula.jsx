@@ -17,7 +17,7 @@ export default function DoctorSchedulePage() {
 
   // Load hospitals on page load
   useEffect(() => {
-    axios.get('http://localhost:8080/api/hospitals')
+    axios.get(import.meta.env.VITE_API_URL + "/hospitals")
       .then(res => setHospitals(res.data))
       .catch(err => console.error('Hospital fetch error:', err));
   }, []);
@@ -25,7 +25,7 @@ export default function DoctorSchedulePage() {
   // Load doctors when hospitalId changes
   useEffect(() => {
     if (hospitalId) {
-      axios.get(`http://localhost:8080/api/doctors/${hospitalId}`)
+      axios.get(import.meta.env.VITE_API_URL + `/doctors/${hospitalId}`)
         .then(res => setDoctors(res.data))
         .catch(err => console.error('Doctor fetch error:', err));
     } else {
@@ -39,7 +39,7 @@ export default function DoctorSchedulePage() {
   // Load booked slots when doctorId and date selected
   useEffect(() => {
     if (doctorId && date) {
-      axios.get(`http://localhost:8080/api/appointments/${doctorId}/${date}`)
+      axios.get(import.meta.env.VITE_API_URL + `/appointments/${doctorId}/${date}`)
         .then(res => setBookedSlots(res.data))
         .catch(err => console.error('Slot fetch error:', err));
     } else {

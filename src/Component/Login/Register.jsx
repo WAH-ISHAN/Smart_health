@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Register() {
@@ -14,6 +14,8 @@ export default function Register() {
     confirmPassword: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -27,22 +29,26 @@ export default function Register() {
       return;
     }
 
+    setLoading(true);
     try {
-      const res = await axios.post(import.meta.env.VITE_API_URL + "/users/register", {
-        username: formData.username,
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        email: formData.email,
-        password: formData.password,
-      });
+      const res = await axios.post(
+        import.meta.env.VITE_API_URL + "/users/register",
+        {
+          username: formData.username,
+          firstname: formData.firstname,
+          lastname: formData.lastname,
+          email: formData.email,
+          password: formData.password,
+        }
+      );
 
-      console.log("Registration Success:", res.data);
-      alert("Registration successful!");
-
+      alert(res.data.message || "Registration successful!");
       navigate("/login");
     } catch (err) {
-      console.error("Registration failed:", err.response?.data || err.message);
-      alert("Registration failed. Please try again.");
+      console.error("Registration failed:", err);
+      alert(err.response?.data?.message || "Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,8 +66,9 @@ export default function Register() {
             onChange={handleChange}
             type="text"
             placeholder="Username"
-            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md focus:outline-none"
+            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md"
             required
+            disabled={loading}
           />
           <input
             name="firstname"
@@ -69,8 +76,9 @@ export default function Register() {
             onChange={handleChange}
             type="text"
             placeholder="First Name"
-            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md focus:outline-none"
+            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md"
             required
+            disabled={loading}
           />
           <input
             name="lastname"
@@ -78,8 +86,9 @@ export default function Register() {
             onChange={handleChange}
             type="text"
             placeholder="Last Name"
-            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md focus:outline-none"
+            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md"
             required
+            disabled={loading}
           />
           <input
             name="email"
@@ -87,8 +96,9 @@ export default function Register() {
             onChange={handleChange}
             type="email"
             placeholder="Email"
-            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md focus:outline-none"
+            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md"
             required
+            disabled={loading}
           />
           <input
             name="password"
@@ -96,8 +106,9 @@ export default function Register() {
             onChange={handleChange}
             type="password"
             placeholder="Password"
-            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md focus:outline-none"
+            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md"
             required
+            disabled={loading}
           />
           <input
             name="confirmPassword"
@@ -105,28 +116,32 @@ export default function Register() {
             onChange={handleChange}
             type="password"
             placeholder="Confirm Password"
-            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md focus:outline-none"
+            className="w-full p-3 bg-gray-900 border border-gray-700 rounded-md"
             required
+            disabled={loading}
           />
 
           <button
             type="submit"
-            className="w-full px-6 py-2 font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 transition"
+            className={`w-full px-6 py-2 font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 transition ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={loading}
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-300">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-400 underline">
+          <a href="/login" className="text-blue-400 underline">
             Sign In
-          </Link>
+          </a>
         </p>
       </div>
 
       <div
-        className="flex-2 bg-cover bg-center rounded-l-4xl"
+        className="flex-2 bg-cover bg-center rounded-l-4xl hidden md:block"
         style={{ backgroundImage: "url('./0002.jpg')" }}
       />
     </div>

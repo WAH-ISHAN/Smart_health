@@ -8,7 +8,7 @@ const UploadReport = () => {
     const formData = new FormData();
     formData.append('report', file);
     try {
-      await axios.post('/api/reports/upload', formData);
+      await axios.post(import.meta.env.VITE_API_URL + "/reports/upload", formData);
       alert('Upload successful');
     } catch (err) {
       console.error(err);
