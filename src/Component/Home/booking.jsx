@@ -16,7 +16,7 @@ const BookingPage = () => {
   const [fetchingDoctors, setFetchingDoctors] = useState(false);
   const [error, setError] = useState('');
 
-  const userId = 1; // Replace with actual logged-in user id
+  const userId = 1; // Replace with real logged-in user id
 
   const timeSlots = [
     { id: 1, timeRange: '09:00 AM - 10:00 AM' },
@@ -45,28 +45,30 @@ const BookingPage = () => {
     fetchHospitals();
   }, []);
 
-  // Fetch doctors on mount
+  // Fetch doctors filtered by hospital whenever hospital changes
   useEffect(() => {
-    const fetchDoctors = async () => {
+    if (!selectedHospitalId) {
+      setDoctors([]);
+      setSelectedDoctorId('');
+      return;
+    }
+
+    const fetchDoctorsByHospital = async () => {
       setError('');
       setFetchingDoctors(true);
       try {
-        const doctorRes = await axios.get(import.meta.env.VITE_API_URL + '/doctor');
-        setDoctors(doctorRes.data);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/doctor/hospital/id/${selectedHospitalId}`);
+        setDoctors(res.data);
       } catch (err) {
         console.error('Error loading doctors:', err);
-        setError('Failed to load doctors.');
+        setError('Failed to load doctors for selected hospital.');
         setDoctors([]);
       } finally {
         setFetchingDoctors(false);
       }
     };
 
-    fetchDoctors();
-  }, []);
-
-  // Reset selected doctor when hospital changes
-  useEffect(() => {
+    fetchDoctorsByHospital();
     setSelectedDoctorId('');
   }, [selectedHospitalId]);
 
@@ -104,12 +106,6 @@ const BookingPage = () => {
       setLoading(false);
     }
   };
-
-  // Filter doctors by selected hospital
-  const filteredDoctors = doctors.filter(d => {
-    const hospitalId = d.hospitalId ?? d.hospital?.id;
-    return Number(hospitalId) === Number(selectedHospitalId);
-  });
 
   const selectedDoctor = doctors.find(d => Number(d.id) === Number(selectedDoctorId));
   const selectedHospital = hospitals.find(h => Number(h.id) === Number(selectedHospitalId));
@@ -172,11 +168,11 @@ const BookingPage = () => {
               value={selectedDoctorId}
               onChange={e => setSelectedDoctorId(e.target.value)}
               className="w-full border rounded px-3 py-2"
-              disabled={!selectedHospitalId}
+              disabled={!selectedHospitalId || doctors.length === 0}
             >
               <option value="">-- Select Doctor --</option>
-              {filteredDoctors.length > 0 ? (
-                filteredDoctors.map(d => (
+              {doctors.length > 0 ? (
+                doctors.map(d => (
                   <option key={d.id} value={d.id}>{d.name}</option>
                 ))
               ) : (

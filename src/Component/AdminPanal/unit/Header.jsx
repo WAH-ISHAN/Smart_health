@@ -6,14 +6,11 @@ export function Header({ user }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear auth data here, for example:
+   
     localStorage.removeItem("authToken");
-    // or clear user context, cookies, etc.
-
-    // Close profile menu
+   
     setIsProfileOpen(false);
 
-    // Redirect to login page
     navigate("/login");
   };
 
