@@ -11,7 +11,7 @@ function AppointmentsManager() {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get(import.meta.env.VITE_API_URL + '/all');
+      const response = await axios.get(import.meta.env.VITE_API_URL + '/appointment/all');
       setAppointments(response.data);
     } catch (error) {
       console.error('Error fetching appointments:', error);

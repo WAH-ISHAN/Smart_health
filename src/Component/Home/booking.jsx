@@ -16,7 +16,7 @@ const BookingPage = () => {
   const [fetchingDoctors, setFetchingDoctors] = useState(false);
   const [error, setError] = useState('');
 
-  const userId = 1; // TODO: replace with actual logged-in user ID
+  const userId = 1; // Replace with actual logged-in user id
 
   const timeSlots = [
     { id: 1, timeRange: '09:00 AM - 10:00 AM' },
@@ -26,34 +26,49 @@ const BookingPage = () => {
     { id: 5, timeRange: '03:00 PM - 04:00 PM' },
   ];
 
+  // Fetch hospitals on mount
   useEffect(() => {
-    const fetchData = async () => {
-      setFetchingHospitals(true);
+    const fetchHospitals = async () => {
       setError('');
+      setFetchingHospitals(true);
       try {
-        const hospitalRes = await axios.get(import.meta.env.VITE_API_URL + "/hospitals");
+        const hospitalRes = await axios.get(import.meta.env.VITE_API_URL + '/hospitals/search');
         setHospitals(hospitalRes.data);
       } catch (err) {
         console.error('Error loading hospitals:', err);
-        setError('Failed to load hospitals. Please check backend or login.');
+        setError('Failed to load hospitals.');
       } finally {
         setFetchingHospitals(false);
       }
+    };
 
+    fetchHospitals();
+  }, []);
+
+  // Fetch doctors on mount
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      setError('');
       setFetchingDoctors(true);
       try {
-        const doctorRes = await axios.get(import.meta.env.VITE_API_URL + "/doctor");
+        const doctorRes = await axios.get(import.meta.env.VITE_API_URL + '/doctor');
         setDoctors(doctorRes.data);
       } catch (err) {
         console.error('Error loading doctors:', err);
-        setError(prev => prev ? prev + ' Also failed to load doctors.' : 'Failed to load doctors.');
+        setError('Failed to load doctors.');
+        setDoctors([]);
       } finally {
         setFetchingDoctors(false);
       }
     };
 
-    fetchData();
+    fetchDoctors();
   }, []);
+
+  // Reset selected doctor when hospital changes
+  useEffect(() => {
+    setSelectedDoctorId('');
+  }, [selectedHospitalId]);
 
   const handleBooking = async (e) => {
     e.preventDefault();
@@ -89,6 +104,12 @@ const BookingPage = () => {
       setLoading(false);
     }
   };
+
+  // Filter doctors by selected hospital
+  const filteredDoctors = doctors.filter(d => {
+    const hospitalId = d.hospitalId ?? d.hospital?.id;
+    return Number(hospitalId) === Number(selectedHospitalId);
+  });
 
   const selectedDoctor = doctors.find(d => Number(d.id) === Number(selectedDoctorId));
   const selectedHospital = hospitals.find(h => Number(h.id) === Number(selectedHospitalId));
@@ -130,10 +151,7 @@ const BookingPage = () => {
           ) : (
             <select
               value={selectedHospitalId}
-              onChange={e => {
-                setSelectedHospitalId(e.target.value);
-                setSelectedDoctorId('');
-              }}
+              onChange={e => setSelectedHospitalId(e.target.value)}
               className="w-full border rounded px-3 py-2"
             >
               <option value="">-- Select Hospital --</option>
@@ -157,14 +175,13 @@ const BookingPage = () => {
               disabled={!selectedHospitalId}
             >
               <option value="">-- Select Doctor --</option>
-              {doctors
-                .filter(d => {
-                  const hospitalId = d.hospitalId ?? d.hospital?.id;
-                  return Number(hospitalId) === Number(selectedHospitalId);
-                })
-                .map(d => (
+              {filteredDoctors.length > 0 ? (
+                filteredDoctors.map(d => (
                   <option key={d.id} value={d.id}>{d.name}</option>
-                ))}
+                ))
+              ) : (
+                <option disabled>No doctors available for selected hospital</option>
+              )}
             </select>
           )}
         </div>
@@ -179,12 +196,12 @@ const BookingPage = () => {
               value={selectedDate}
               onChange={e => setSelectedDate(e.target.value)}
               className="border rounded px-3 py-2 w-full"
-              min={new Date().toISOString().split("T")[0]}
+              min={new Date().toISOString().split('T')[0]}
             />
           </div>
         </div>
 
-        {/* Time Slot Selection */}
+        {/* Time Slot */}
         <div>
           <label className="block mb-1 font-medium">Time Slot</label>
           <select
