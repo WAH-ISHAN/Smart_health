@@ -21,7 +21,7 @@ export default function DoctorList() {
       });
   }, []);
 
-  // Filtered results
+  // Filtered results based on search input
   const filtered = doctors.filter(d =>
     d.name.toLowerCase().includes(search.toLowerCase()) ||
     d.speciality.toLowerCase().includes(search.toLowerCase()) ||
@@ -53,7 +53,7 @@ export default function DoctorList() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.length > 0 ? (
               filtered.map((d, idx) => (
-                <div key={idx} className="rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow p-6">
+                <div key={idx} className="rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow p-6 flex flex-col h-full">
                   <div className="flex items-center mb-3 text-green-700 text-xl font-bold">
                     <FaUserMd className="mr-3" />
                     {d.name}

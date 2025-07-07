@@ -3,21 +3,25 @@ import axios from 'axios';
 import { FaCalendarAlt } from 'react-icons/fa';
 
 const BookingPage = () => {
-  const [hospitals, setHospitals] = useState([]);
-  const [doctors, setDoctors] = useState([]);
+  /* ──────────────────── State ──────────────────── */
+  const [hospitals, setHospitals]     = useState([]);
+  const [doctors, setDoctors]         = useState([]);
+
   const [selectedHospitalId, setSelectedHospitalId] = useState('');
-  const [selectedDoctorId, setSelectedDoctorId] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDoctorId,   setSelectedDoctorId]   = useState('');
+  const [selectedDate,       setSelectedDate]       = useState('');
   const [selectedTimeSlotId, setSelectedTimeSlotId] = useState('');
-  const [patientName, setPatientName] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [fetchingHospitals, setFetchingHospitals] = useState(false);
-  const [fetchingDoctors, setFetchingDoctors] = useState(false);
-  const [error, setError] = useState('');
+  const [patientName,        setPatientName]        = useState('');
 
-  const userId = 1; // Replace with real logged-in user id
+  const [submitted,         setSubmitted]        = useState(false);
+  const [loading,           setLoading]          = useState(false);
+  const [fetchingHospitals, setFetchingHospitals]= useState(false);
+  const [fetchingDoctors,   setFetchingDoctors]  = useState(false);
+  const [error,             setError]            = useState('');
 
+  const userId = 1; // ── replace with actual logged‑in user id
+
+  /* Dummy static time‑slot list */
   const timeSlots = [
     { id: 1, timeRange: '09:00 AM - 10:00 AM' },
     { id: 2, timeRange: '10:00 AM - 11:00 AM' },
@@ -26,14 +30,16 @@ const BookingPage = () => {
     { id: 5, timeRange: '03:00 PM - 04:00 PM' },
   ];
 
-  // Fetch hospitals on mount
+  /* ──────────────────── 1. Load hospital list ──────────────────── */
   useEffect(() => {
     const fetchHospitals = async () => {
       setError('');
       setFetchingHospitals(true);
       try {
-        const hospitalRes = await axios.get(import.meta.env.VITE_API_URL + '/hospitals/search');
-        setHospitals(hospitalRes.data);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/hospitals/search`
+        );
+        setHospitals(res.data);
       } catch (err) {
         console.error('Error loading hospitals:', err);
         setError('Failed to load hospitals.');
@@ -41,11 +47,10 @@ const BookingPage = () => {
         setFetchingHospitals(false);
       }
     };
-
     fetchHospitals();
   }, []);
 
-  // Fetch doctors filtered by hospital whenever hospital changes
+  /* ──────────────────── 2. Load doctors when hospital changes ──────────────────── */
   useEffect(() => {
     if (!selectedHospitalId) {
       setDoctors([]);
@@ -53,12 +58,22 @@ const BookingPage = () => {
       return;
     }
 
-    const fetchDoctorsByHospital = async () => {
+    /**
+     * fetchDoctors() – uses hospital **name** (not ID) because
+     * backend endpoint = `/api/doctor/hospital/{hospitalName}`
+     */
+    const fetchDoctors = async (hospitalName) => {
       setError('');
       setFetchingDoctors(true);
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/doctor/hospital/id/${selectedHospitalId}`);
-        setDoctors(res.data);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/doctor/hospital/${encodeURIComponent(
+            hospitalName
+          )}`
+        );
+        if (!res.ok) throw new Error('Network response was not ok');
+        const doctorArray = await res.json(); // returns []
+        setDoctors(doctorArray);
       } catch (err) {
         console.error('Error loading doctors:', err);
         setError('Failed to load doctors for selected hospital.');
@@ -68,14 +83,26 @@ const BookingPage = () => {
       }
     };
 
-    fetchDoctorsByHospital();
+    // look up selected hospital's *name* from its id
+    const chosenHospital = hospitals.find(
+      (h) => Number(h.id) === Number(selectedHospitalId)
+    );
+    if (chosenHospital?.name) {
+      fetchDoctors(chosenHospital.name);
+    }
     setSelectedDoctorId('');
-  }, [selectedHospitalId]);
+  }, [selectedHospitalId, hospitals]);
 
+  /* ──────────────────── 3. Submit booking ──────────────────── */
   const handleBooking = async (e) => {
     e.preventDefault();
-
-    if (!selectedHospitalId || !selectedDoctorId || !selectedDate || !selectedTimeSlotId || !patientName.trim()) {
+    if (
+      !selectedHospitalId ||
+      !selectedDoctorId ||
+      !selectedDate ||
+      !selectedTimeSlotId ||
+      !patientName.trim()
+    ) {
       setError('Please fill all fields.');
       return;
     }
@@ -93,8 +120,11 @@ const BookingPage = () => {
     };
 
     try {
-      const response = await axios.post(import.meta.env.VITE_API_URL + '/appointment', payload);
-      if (response.status === 201 || response.status === 200) {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/appointment`,
+        payload
+      );
+      if (res.status === 200 || res.status === 201) {
         setSubmitted(true);
       } else {
         setError('Booking failed. Please try again.');
@@ -107,9 +137,15 @@ const BookingPage = () => {
     }
   };
 
-  const selectedDoctor = doctors.find(d => Number(d.id) === Number(selectedDoctorId));
-  const selectedHospital = hospitals.find(h => Number(h.id) === Number(selectedHospitalId));
+  /* helpers for confirmation screen */
+  const selectedDoctor = doctors.find(
+    (d) => Number(d.id) === Number(selectedDoctorId)
+  );
+  const selectedHospital = hospitals.find(
+    (h) => Number(h.id) === Number(selectedHospitalId)
+  );
 
+  /* ──────────────────── 4. Confirmation Screen ──────────────────── */
   if (submitted) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-green-100 p-8">
@@ -132,14 +168,18 @@ const BookingPage = () => {
     );
   }
 
+  /* ──────────────────── 5. Booking Form ──────────────────── */
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center p-4">
-      <form onSubmit={handleBooking} className="bg-white rounded-xl shadow p-8 w-full max-w-lg space-y-6">
+      <form
+        onSubmit={handleBooking}
+        className="bg-white rounded-xl shadow p-8 w-full max-w-lg space-y-6"
+      >
         <h1 className="text-3xl font-bold text-center text-green-800">Book Appointment</h1>
 
         {error && <div className="bg-red-100 text-red-600 p-3 rounded">{error}</div>}
 
-        {/* Hospital Selection */}
+        {/* Hospital Dropdown */}
         <div>
           <label className="block mb-1 font-medium">Select Hospital</label>
           {fetchingHospitals ? (
@@ -147,18 +187,20 @@ const BookingPage = () => {
           ) : (
             <select
               value={selectedHospitalId}
-              onChange={e => setSelectedHospitalId(e.target.value)}
+              onChange={(e) => setSelectedHospitalId(e.target.value)}
               className="w-full border rounded px-3 py-2"
             >
               <option value="">-- Select Hospital --</option>
-              {hospitals.map(h => (
-                <option key={h.id} value={h.id}>{h.name}</option>
+              {hospitals.map((h) => (
+                <option key={h.id} value={h.id}>
+                  {h.name}
+                </option>
               ))}
             </select>
           )}
         </div>
 
-        {/* Doctor Selection */}
+        {/* Doctor Dropdown */}
         <div>
           <label className="block mb-1 font-medium">Select Doctor</label>
           {fetchingDoctors ? (
@@ -166,14 +208,16 @@ const BookingPage = () => {
           ) : (
             <select
               value={selectedDoctorId}
-              onChange={e => setSelectedDoctorId(e.target.value)}
+              onChange={(e) => setSelectedDoctorId(e.target.value)}
               className="w-full border rounded px-3 py-2"
               disabled={!selectedHospitalId || doctors.length === 0}
             >
               <option value="">-- Select Doctor --</option>
               {doctors.length > 0 ? (
-                doctors.map(d => (
-                  <option key={d.id} value={d.id}>{d.name}</option>
+                doctors.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.name}
+                  </option>
                 ))
               ) : (
                 <option disabled>No doctors available for selected hospital</option>
@@ -190,7 +234,7 @@ const BookingPage = () => {
             <input
               type="date"
               value={selectedDate}
-              onChange={e => setSelectedDate(e.target.value)}
+              onChange={(e) => setSelectedDate(e.target.value)}
               className="border rounded px-3 py-2 w-full"
               min={new Date().toISOString().split('T')[0]}
             />
@@ -202,12 +246,14 @@ const BookingPage = () => {
           <label className="block mb-1 font-medium">Time Slot</label>
           <select
             value={selectedTimeSlotId}
-            onChange={e => setSelectedTimeSlotId(e.target.value)}
+            onChange={(e) => setSelectedTimeSlotId(e.target.value)}
             className="w-full border rounded px-3 py-2"
           >
             <option value="">-- Select Time Slot --</option>
-            {timeSlots.map(slot => (
-              <option key={slot.id} value={slot.id}>{slot.timeRange}</option>
+            {timeSlots.map((slot) => (
+              <option key={slot.id} value={slot.id}>
+                {slot.timeRange}
+              </option>
             ))}
           </select>
         </div>
@@ -218,17 +264,19 @@ const BookingPage = () => {
           <input
             type="text"
             value={patientName}
-            onChange={e => setPatientName(e.target.value)}
+            onChange={(e) => setPatientName(e.target.value)}
             className="w-full border rounded px-3 py-2"
             placeholder="Full name"
           />
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-3 rounded text-white ${loading ? 'bg-green-300' : 'bg-green-600 hover:bg-green-700'}`}
+          className={`w-full py-3 rounded text-white ${
+            loading ? 'bg-green-300' : 'bg-green-600 hover:bg-green-700'
+          }`}
         >
           {loading ? 'Booking...' : 'Confirm Booking'}
         </button>
