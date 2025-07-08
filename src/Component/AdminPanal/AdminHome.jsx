@@ -6,7 +6,7 @@ import ManageUsersAdminPanel from "./ManageUsersAdminPanel";
 import EditHospital from "./EditHospital";
 import ViewFeedback from "./ViewFeedback";
 import AppointmentsManager from "./Appointments";
-import ReportsViewer from "./ReportView";
+
 
 export default function AdminHome() {
   const location = useLocation();
