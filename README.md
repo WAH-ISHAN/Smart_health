@@ -1,26 +1,102 @@
-SmartHealthSystem
-This repository contains the source code for SmartHealthSystem, a full-stack healthcare application designed to simplify appointment booking across hospitals and doctors throughout Sri Lanka.
+# 🏥 SmartHealthSystem - Healthcare Appointment Platform
 
-Built with a Spring Boot (Java) backend and a ReactJS frontend following the MVC architecture, this system enables users to easily find hospitals, view doctors, and book appointments online. It includes complete CRUD (Create, Read, Update, Delete) functionalities for managing doctors, hospitals, and appointments. The system supports smooth data flow between the frontend and backend with RESTful APIs.
+**SmartHealthSystem** is a full-stack web application designed to streamline the appointment booking process across hospitals and doctors in Sri Lanka. Built using **Spring Boot** and **ReactJS** following the MVC architecture, it provides a seamless interface for patients to find healthcare providers and for administrators to manage system data.
 
-Key Features:
-Appointment booking with any hospital or doctor in Sri Lanka
+## 🚀 Features
 
-Hospital and doctor management with CRUD operations
+* **📅 Appointment Booking:** Patients can easily search for and book appointments with doctors at various hospitals.
+* **🏥 Hospital Management:** Full CRUD capabilities to add, update, view, and remove hospital details.
+* **👨‍⚕️ Doctor Management:** Manage doctor profiles, specializations, and availability.
+* **🔗 RESTful Architecture:** robust backend APIs ensuring smooth data flow between the client and server.
+* **🔍 Search & Filter:** Easy-to-use search functionality to find specific doctors or hospitals.
 
-User-friendly React frontend for seamless interaction
+## 🛠️ Tech Stack
 
-Backend built on Spring Boot with secure and scalable REST APIs
+| Component | Technology |
+| :--- | :--- |
+| **Frontend** | ReactJS, Axios, CSS/Bootstrap |
+| **Backend** | Java, Spring Boot (Web, JPA) |
+| **Database** | MySQL (Managed via MySQL Workbench) |
+| **Architecture** | MVC (Model-View-Controller) |
+| **Build Tools** | Maven (Backend), npm (Frontend) |
 
-MVC architecture for clear separation of concerns
+## 📂 Project Structure
 
-Technologies Used:
-Backend: Spring Boot (Java), REST API
+```text
+SmartHealthSystem/
+├── backend/           # Spring Boot Application
+│   ├── src/main/java  # Controllers, Models, Repositories, Services
+│   └── src/main/resources # Application properties & config
+├── frontend/          # ReactJS Application
+│   ├── src/components # Reusable UI components
+│   ├── src/services   # API service calls
+│   └── public/
+└── README.md
 
-Frontend: ReactJS
+**
+⚙️ Installation & Setup
+Follow these steps to get the project running on your local machine.
 
-Database: (you can mention the DB used if you want, e.g., WorkBench)
+Prerequisites
+Java Development Kit (JDK 17 or higher)
 
-Architecture: MVC
+Node.js & npm
 
-This project aims to modernize healthcare appointment systems by providing an accessible and efficient platform for patients and healthcare providers alike.
+MySQL Server & Workbench
+
+1. Database Setup
+Open MySQL Workbench.
+
+Create a new database named smart_health_db (or whatever name you used).
+
+Update the database credentials in the backend application.properties file.
+
+2. Backend Setup (Spring Boot)
+Navigate to the backend directory:
+Bash
+
+cd backend
+Configure your database in src/main/resources/application.properties:
+
+Properties
+
+spring.datasource.url=jdbc:mysql://localhost:3306/smart_health_db
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+Run the application:
+
+Bash
+
+./mvnw spring-boot:run
+The backend server will start on http://localhost:8080.
+
+3. Frontend Setup (React)
+Open a new terminal and navigate to the frontend directory:
+
+Bash
+
+cd frontend
+Install dependencies:
+
+Bash
+
+npm install
+Start the React application:
+
+Bash
+
+npm start
+The frontend will launch on http://localhost:3000.
+
+🔗 API Endpoints (Examples)
+GET /api/doctors - Get all doctors
+
+POST /api/doctors - Add a new doctor
+
+GET /api/hospitals - Get all hospitals
+
+POST /api/appointments - Book an appointment
+
+
+
